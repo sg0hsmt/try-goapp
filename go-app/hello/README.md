@@ -1,6 +1,7 @@
 # go-app Hello
 
-[go-app](https://github.com/maxence-charriere/go-app) は Go (WebAssembly)で [PWA](https://developers.google.com/web/progressive-web-apps/) を実装するためのパッケージ
+[go-app](https://github.com/maxence-charriere/go-app) は Go (WebAssembly)で [PWA](https://developers.google.com/web/progressive-web-apps/) を実装するためのパッケージで、
+[ドキュメントサイト](https://go-app.dev/) 自体も go-app で構築されている。
 
 https://github.com/maxence-charriere/go-app
 
@@ -8,44 +9,49 @@ https://github.com/maxence-charriere/go-app
 
 ## Build wasm and server
 
-ビルドには Go 1.14 以上と Go module が必要
+ビルドには Go 1.17 以上が必要
 
-```
-$ cd app
-$ GOARCH=wasm GOOS=js go build -o ../app.wasm
+```console
+GOARCH=wasm GOOS=js go build -o ./web/app.wasm
 ```
 
-```
-$ cd server
-$ go build -o ../
+```console
+go build
 ```
 
 ## Run Server
 
-```
-$ server
+```console
+./hello
 ```
 
-ブラウザで http://localhost:7777/ を開くと Hello Demo が動く
+or
+
+```console
+go run hello.go
+```
+
+ブラウザで http://localhost:8000/ を開くと Hello Demo が動く
 
 ## Notes
 
 wasm の実行に必要な JavaScript コードなどは go-app の app.Handler が提供している。
 
-app.wasm のサイズは 4344507 byte (約 4.1 MB)
-
-wasm のビルドには Go 1.14 が必要だがサーバー側は Go 1.13 でもビルドできる。
-
 wasm は Service Worker がローカルストレージにキャッシュしている。
 コードを変更してもキャッシュが残っていることが多いので注意が必要
+
+app.wasm のサイズは 12908865 byte (約 12.3 MB) でかなり大きい。
+wasm サイズについては Issue も立っているがすぐに改善する見込みは薄い。
+
+https://github.com/maxence-charriere/go-app/issues/534
 
 app.Handler.Icon.Default を設定していない場合、次の画像ファイルが使用される。
 
 - https://storage.googleapis.com/murlok-github/icon-192.png
 - https://storage.googleapis.com/murlok-github/icon-512.png
 
-https://github.com/maxence-charriere/go-app/blob/v6.0.3/pkg/app/http.go#L135-L138
+https://github.com/maxence-charriere/go-app/blob/v9.2.1/pkg/app/http.go#L206-L209
 
 app.Handler は静的ファイルの配信をサポートしているが、ディレクトリのプレフィックスは web 固定になっている。
 
-https://github.com/maxence-charriere/go-app/blob/v6.0.3/pkg/app/http.go#L272
+https://go-app.dev/architecture#static-resources

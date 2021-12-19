@@ -1,6 +1,11 @@
 package main
 
-import "github.com/maxence-charriere/go-app/v6/pkg/app"
+import (
+	"log"
+	"net/http"
+
+	"github.com/maxence-charriere/go-app/v9/pkg/app"
+)
 
 type hello struct {
 	app.Compo
@@ -22,18 +27,26 @@ func (h *hello) Render() app.UI {
 				Value(h.name).
 				Placeholder("What is your name?").
 				AutoFocus(true).
-				OnChange(h.OnInputChange),
+				OnChange(h.ValueTo(&h.name)),
 		),
 	)
-}
-
-func (h *hello) OnInputChange(src app.Value, e app.Event) {
-	h.name = src.Get("value").String()
-	h.Update()
 }
 
 func main() {
 	app.Route("/", &hello{})
 	app.Route("/hello", &hello{})
-	app.Run()
+	app.RunWhenOnBrowser()
+
+	http.Handle("/", &app.Handler{
+		Name:        "Hello",
+		Title:       "Hello Demo",
+		Description: "go-app Hello Demo",
+		Icon: app.Icon{
+			Default: "/web/192x192.png",
+		},
+	})
+
+	if err := http.ListenAndServe(":8000", nil); err != nil {
+		log.Fatal(err)
+	}
 }

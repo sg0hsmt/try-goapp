@@ -1,5 +1,7 @@
 module github.com/sg0hsmt/til
 
-go 1.11
+go 1.17
 
-require github.com/maxence-charriere/go-app/v6 v6.0.3
+require github.com/maxence-charriere/go-app/v9 v9.2.1
+
+require github.com/google/uuid v1.3.0 // indirect
