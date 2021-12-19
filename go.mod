@@ -1,4 +1,4 @@
-module github.com/sg0hsmt/til
+module github.com/sg0hsmt/try-goapp
 
 go 1.17
 
